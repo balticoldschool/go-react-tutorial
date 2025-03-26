@@ -1,7 +1,9 @@
 package main
 
-import "fmt"
+import (
+	"github.com/balticoldschool/go-react-tutorial/src/app"
+)
 
 func main() {
-	fmt.Println("Hallo Welt")
+	app.CreateApp()
 }
