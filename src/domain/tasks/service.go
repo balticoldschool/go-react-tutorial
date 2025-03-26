@@ -7,6 +7,7 @@ type Service interface {
 	GetAll() *[]*Task
 	GetById(id uint) (*Task, *errors.RestErr)
 	UpdateTaskCompletion(id uint) (*Task, *errors.RestErr)
+	RemoveTask(id uint) (*Task, *errors.RestErr)
 }
 
 type service struct{}
@@ -35,4 +36,8 @@ func (s service) GetById(id uint) (*Task, *errors.RestErr) {
 
 func (s service) UpdateTaskCompletion(id uint) (*Task, *errors.RestErr) {
 	return updateCompletion(id)
+}
+
+func (s service) RemoveTask(id uint) (*Task, *errors.RestErr) {
+	return removeById(id)
 }

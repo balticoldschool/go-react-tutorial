@@ -15,7 +15,11 @@ type Task struct {
 }
 
 func addToTasks(task *Task) *Task {
-	task.ID = uint(len(TaskStorage) + 1)
+	if len(TaskStorage) == 0 {
+		task.ID = 1
+	} else {
+		task.ID = TaskStorage[len(TaskStorage)-1].ID + 1
+	}
 	TaskStorage = append(TaskStorage, task)
 
 	return task
@@ -40,4 +44,15 @@ func updateCompletion(id uint) (*Task, *errors.RestErr) {
 	task.Completed = !task.Completed
 
 	return task, nil
+}
+
+func removeById(id uint) (*Task, *errors.RestErr) {
+	for index, task := range TaskStorage {
+		if task.ID == id {
+			TaskStorage = append(TaskStorage[:index], TaskStorage[index+1:]...)
+			return task, nil
+		}
+	}
+
+	return nil, errors.NewNotFoundErr("no task found")
 }

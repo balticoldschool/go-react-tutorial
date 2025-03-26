@@ -14,4 +14,5 @@ func mapRoutes(app *fiber.App) {
 	app.Get("/task/:id", taskController.GetTaskById)
 	app.Patch("/task/:id", taskController.UpdateTaskCompletion)
 	app.Post("/create", taskController.CreateTask)
+	app.Delete("/task/:id", taskController.DeleteTask)
 }
