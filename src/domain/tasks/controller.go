@@ -8,6 +8,7 @@ import (
 
 type Controller interface {
 	CreateTask(ctx *fiber.Ctx) error
+	GetAllTasks(ctx *fiber.Ctx) error
 }
 
 type controller struct {
@@ -29,6 +30,12 @@ func (c controller) CreateTask(ctx *fiber.Ctx) error {
 	}
 
 	return ctx.
-		Status(http.StatusOK).
+		Status(http.StatusCreated).
 		JSON(*c.service.AddTask(&newTask))
+}
+
+func (c controller) GetAllTasks(ctx *fiber.Ctx) error {
+	tasks := c.service.GetAll()
+
+	return ctx.Status(http.StatusOK).JSON(tasks)
 }
