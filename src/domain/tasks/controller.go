@@ -9,6 +9,7 @@ import (
 type Controller interface {
 	CreateTask(ctx *fiber.Ctx) error
 	GetAllTasks(ctx *fiber.Ctx) error
+	GetTaskById(ctx *fiber.Ctx) error
 }
 
 type controller struct {
@@ -38,4 +39,19 @@ func (c controller) GetAllTasks(ctx *fiber.Ctx) error {
 	tasks := c.service.GetAll()
 
 	return ctx.Status(http.StatusOK).JSON(tasks)
+}
+
+func (c controller) GetTaskById(ctx *fiber.Ctx) error {
+	id, err := ctx.ParamsInt("id")
+	if err != nil {
+		restErr := errors.NewBadRequestErr("invalid task id")
+		return ctx.Status(restErr.Status).JSON(restErr)
+	}
+
+	response, restErr := c.service.GetById(uint(id))
+	if restErr != nil {
+		return ctx.Status(restErr.Status).JSON(restErr)
+	}
+
+	return ctx.Status(http.StatusOK).JSON(response)
 }
