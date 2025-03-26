@@ -4,8 +4,9 @@ import "github.com/balticoldschool/go-react-tutorial/src/utils/errors"
 
 type Service interface {
 	AddTask(task *Task) *Task
-	GetAll() *[]Task
+	GetAll() *[]*Task
 	GetById(id uint) (*Task, *errors.RestErr)
+	UpdateTaskCompletion(id uint) (*Task, *errors.RestErr)
 }
 
 type service struct{}
@@ -15,17 +16,11 @@ func NewTaskService() Service {
 }
 
 func (s service) AddTask(task *Task) *Task {
-	newTask := *task
-	newTask.ID = uint(len(TaskStorage) + 1)
-
-	TaskStorage = append(TaskStorage, newTask)
-
-	return &newTask
+	return addToTasks(task)
 }
 
-func (s service) GetAll() *[]Task {
-	tasks := TaskStorage
-	return &tasks
+func (s service) GetAll() *[]*Task {
+	return &TaskStorage
 }
 
 func (s service) GetById(id uint) (*Task, *errors.RestErr) {
@@ -36,4 +31,8 @@ func (s service) GetById(id uint) (*Task, *errors.RestErr) {
 	}
 
 	return task, nil
+}
+
+func (s service) UpdateTaskCompletion(id uint) (*Task, *errors.RestErr) {
+	return updateCompletion(id)
 }

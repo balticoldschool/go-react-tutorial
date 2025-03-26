@@ -10,7 +10,8 @@ var (
 )
 
 func mapRoutes(app *fiber.App) {
-	app.Get("/tasks", taskController.GetAllTasks)
+	app.Get("/task/all", taskController.GetAllTasks)
 	app.Get("/task/:id", taskController.GetTaskById)
+	app.Patch("/task/:id", taskController.UpdateTaskCompletion)
 	app.Post("/create", taskController.CreateTask)
 }

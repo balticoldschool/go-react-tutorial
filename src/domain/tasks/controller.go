@@ -10,6 +10,7 @@ type Controller interface {
 	CreateTask(ctx *fiber.Ctx) error
 	GetAllTasks(ctx *fiber.Ctx) error
 	GetTaskById(ctx *fiber.Ctx) error
+	UpdateTaskCompletion(ctx *fiber.Ctx) error
 }
 
 type controller struct {
@@ -54,4 +55,19 @@ func (c controller) GetTaskById(ctx *fiber.Ctx) error {
 	}
 
 	return ctx.Status(http.StatusOK).JSON(response)
+}
+
+func (c controller) UpdateTaskCompletion(ctx *fiber.Ctx) error {
+	id, err := ctx.ParamsInt("id")
+	if err != nil {
+		restErr := errors.NewBadRequestErr("invalid id param")
+		return ctx.Status(restErr.Status).JSON(restErr)
+	}
+
+	task, responseErr := c.service.UpdateTaskCompletion(uint(id))
+	if responseErr != nil {
+		return ctx.Status(responseErr.Status).JSON(responseErr)
+	}
+
+	return ctx.Status(http.StatusOK).JSON(task)
 }
